@@ -40,11 +40,26 @@ namespace _911Medical.Application.Services.TripServices
 
         public Vehicle Find(IEnumerable<Vehicle> vehicles, Address address)
         {
-            // get closest vehicle
-            var skip = (int)(DateTime.UtcNow.Ticks % vehicles.Count() - 1);
-            var vehicle = vehicles.Skip(skip).FirstOrDefault();
+            // get closest vehicle - dummy implementation
 
-            return vehicle;
+            return vehicles.OrderBy(x => CalculateDistance(address.City, x.State.CurrentCity)).FirstOrDefault();
+
+            //var skip = (int)(DateTime.UtcNow.Ticks % vehicles.Count() - 1);
+            //var vehicle = vehicles.Skip(skip).FirstOrDefault();
+
+            //return vehicle;
+        }
+
+        private int CalculateDistance(string city1, string city2)
+        { 
+            if (city1.Equals(city2))
+            {
+                return 0;
+            }
+
+            var key = $"{city1}-{city2}";
+
+            return _distances[key];
         }
     }
 }

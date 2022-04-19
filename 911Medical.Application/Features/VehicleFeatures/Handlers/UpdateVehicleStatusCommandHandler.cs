@@ -40,12 +40,14 @@ namespace _911Medical.Application.Features.VehicleFeatures.Handlers
             {
                 vehicle.SetState(new VehicleState()
                 {
-                    Status = request.Status
+                    Status = request.Status,
+                    CurrentCity = request.CurrentCity,
                 });
             }
             else
             {
                 vehicle.State.Status = request.Status;
+                vehicle.State.CurrentCity = request.CurrentCity;
             }
 
             await this._repository.UpdateAsync(vehicle, cancellationToken);

@@ -40,7 +40,7 @@ namespace _911Medical.Application.Features.TripFeatures.Handlers
 
             if (trip == null)
             {
-                throw new ArgumentOutOfRangeException(nameof(request.TripId), $"Trip with id={request.TripId} not found.");
+                throw new ArgumentOutOfRangeException(nameof(request.TripId), $"Trip with id={request.TripId} was not found.");
             }
 
             // get available vehicles
@@ -64,9 +64,8 @@ namespace _911Medical.Application.Features.TripFeatures.Handlers
             // persist state
             await this._tripRepository.UpdateAsync(trip);
 
-            await _mediator.Publish(new TripDispatchedEvent() { TripId = trip.Id, VehicleId = vehicle.Id }, cancellationToken);
-
             //TODO: Send notification via SignalR hub
+            await _mediator.Publish(new TripDispatchedEvent() { TripId = trip.Id, VehicleId = vehicle.Id }, cancellationToken);
 
             return trip;
         }

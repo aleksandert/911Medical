@@ -1,6 +1,7 @@
 ﻿using _911Medical.Application.Features.PatientFeatures.Commands;
 using _911Medical.Application.Features.TripFeatures.Commands;
 using _911Medical.Application.Features.VehicleFeatures.Commands;
+using _911Medical.Application.Features.VehicleFeatures.Queries;
 using _911Medical.Domain.Entities;
 using _911Medical.WebApp.Data;
 using MediatR;
@@ -35,7 +36,9 @@ namespace _911Medical.WebApp
             await context.Database.EnsureCreatedAsync();
 
             await CreateTestUsers(scope.ServiceProvider);
+            await CreateVehicleStates(scope.ServiceProvider);
             //await CreateTestVehicles(scope.ServiceProvider);
+
             //await CreateTestPatients(scope.ServiceProvider);
             //await CreateTestTrips(scope.ServiceProvider);
             await CreateOpenIdClientApplication(scope.ServiceProvider);
@@ -105,6 +108,28 @@ namespace _911Medical.WebApp
                 };
 
                 await mediator.Send(cmd);
+            }
+        }
+
+        private async Task CreateVehicleStates(IServiceProvider serviceProvider)
+        {
+            var mediator = serviceProvider.GetRequiredService<IMediator>();
+
+            var vehicles = await mediator.Send(new GetAllVehiclesQuery());
+
+            var cities = new[] { "Ptuj", "Maribor", "Kranj", "Koper", "Hajdina" };
+
+            foreach (var vehicle in vehicles)
+            {
+                var skip = (int)(DateTime.UtcNow.Ticks % cities.Count() - 1);
+
+                var currentCity = cities.Skip(skip).FirstOrDefault();
+
+                await mediator.Send(new UpdateVehicleStatusCommand() { 
+                    VehicleId = vehicle.Id, 
+                    Status = VehicleStatus.Connected,
+                    CurrentCity = currentCity 
+                });
             }
         }
 
