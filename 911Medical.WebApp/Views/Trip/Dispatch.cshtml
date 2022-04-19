@@ -1,0 +1,39 @@
+﻿@model _911Medical.WebApp.Models.TripAssignViewModel
+
+@{
+    ViewData["Title"] = "Dispatch";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Dispatch</h1>
+
+<div>
+    <h4>Trip</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DateCreated)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DateCreated)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TripStatusName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TripStatusName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.StartAddress)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.StartAddress)
+        </dd>
+    </dl>
+    
+    <form asp-action="Dispatch">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Dispatch" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>
